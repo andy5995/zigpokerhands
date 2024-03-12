@@ -9,7 +9,7 @@ pub fn main() !void {
     const hand = getFiveCards(&deck);
     const hasPair = containsPair(hand);
     std.debug.print("Hand: {any}\n", .{hand});
-    std.debug.print("Contains a pair: {any}\n", .{hasPair});
+    std.debug.print("Contains a pair: {}\n", .{hasPair});
 }
 
 fn getFiveCards(deck: *zdeck.Deck) [5]zdeck.Card {
