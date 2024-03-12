@@ -8,8 +8,8 @@ pub fn main() !void {
 
     const hand = getFiveCards(&deck);
     const hasPair = containsPair(hand);
-    std.debug.print("Hand: {}\n", .{hand});
-    std.debug.print("Contains a pair: {}\n", .{hasPair});
+    std.debug.print("Hand: {any}\n", .{hand});
+    std.debug.print("Contains a pair: {any}\n", .{hasPair});
 }
 
 fn getFiveCards(deck: *zdeck.Deck) [5]zdeck.Card {
@@ -40,8 +40,19 @@ fn containsPair(hand: [5]zdeck.Card) bool {
 }
 
 test "simple test" {
-    var list = std.ArrayList(i32).init(std.testing.allocator);
-    defer list.deinit(); // try commenting this out and see if zig detects the memory leak!
-    try list.append(42);
-    try std.testing.expectEqual(@as(i32, 42), list.pop());
+    var deck = zdeck.Deck.init();
+    var rng = std.rand.DefaultPrng.init(1);
+    zdeck.Deck.shuffle(&deck, &rng.random());
+
+    var hand = getFiveCards(&deck);
+    std.debug.print("Hand: {any}\n", .{hand});
+    try std.testing.expectEqual(true, containsPair(hand));
+
+    hand = getFiveCards(&deck);
+    std.debug.print("Hand: {any}\n", .{hand});
+    try std.testing.expectEqual(true, containsPair(hand));
+
+    hand = getFiveCards(&deck);
+    std.debug.print("Hand: {any}\n", .{hand});
+    try std.testing.expectEqual(false, containsPair(hand));
 }
