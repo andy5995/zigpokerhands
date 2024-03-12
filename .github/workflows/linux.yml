@@ -1,0 +1,33 @@
+name: Linux CI
+
+on:
+  push:
+    branches: [ trunk ]
+  pull_request:
+    branches: [ trunk ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Zig
+        run: |
+          ZIG_BASE="zig-linux-x86_64-0.12.0-dev.3193+4ba4f94c9"
+          wget "https://ziglang.org/builds/$ZIG_BASE.tar.xz"
+          tar -xf "$ZIG_BASE.tar.xz"
+          sudo mv "$ZIG_BASE" /usr/local/zig
+          echo "/usr/local/zig" >> $GITHUB_PATH
+
+      - name: Build
+        run: zig build
+
+      - name: Test
+        run: zig build test
+
