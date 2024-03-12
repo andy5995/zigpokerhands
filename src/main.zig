@@ -14,7 +14,7 @@ pub fn main() !void {
 
 fn getFiveCards(deck: *zdeck.Deck) [5]zdeck.Card {
     var hand: [5]zdeck.Card = undefined;
-    for (hand[0..]) |i| {
+    for (hand, 0..) |_, i| {
         hand[i] = deck.getTopCard() orelse unreachable;
     }
     return hand;
@@ -22,7 +22,7 @@ fn getFiveCards(deck: *zdeck.Deck) [5]zdeck.Card {
 
 fn containsPair(hand: [5]zdeck.Card) bool {
     var counts: [13]u4 = undefined;
-    for (counts[0..]) |i| {
+    for (counts, 0..) |_, i| {
         counts[i] = 0;
     }
 

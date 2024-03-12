@@ -15,12 +15,11 @@ pub fn build(b: *std.Build) void {
     // set a preferred release mode, allowing the user to decide how to optimize.
     const optimize = b.standardOptimizeOption(.{});
 
-    // load the "zig-speak" dependency from build.zig.zon
     const package = b.dependency("zigdeck", .{
         .target = target,
         .optimize = optimize,
     });
-    // load the "speak" module from the package
+
     const module = package.module("zigdeck");
 
     const exe = b.addExecutable(.{

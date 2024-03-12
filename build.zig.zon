@@ -15,30 +15,17 @@
     // Once all dependencies are fetched, `zig build` no longer requires
     // internet connectivity.
     .dependencies = .{
-        // See `zig fetch --save <url>` for a command-line interface for adding dependencies.
         .zigdeck = .{
-            .url = "../zigdeck",
-            .hash = "1220cae74216f62dda7f238140c23824d082766e209682b0c9c5fa3fdbc048658989",
+            .url = "https://github.com/andy5995/zigdeck/tarball/83ec732d3c934d927fbec56365fab5020366a809",
+            .hash = "1220ff3c111e9d1fe174bbab17f2a2993ec306b28cf788e8d519fe7d48b1d0fa7173",
         },
     },
 
-    // Specifies the set of files and directories that are included in this package.
-    // Only files and directories listed here are included in the `hash` that
-    // is computed for this package.
-    // Paths are relative to the build root. Use the empty string (`""`) to refer to
-    // the build root itself.
-    // A directory listed here means that all files within, recursively, are included.
     .paths = .{
-        // This makes *all* files, recursively, included in this package. It is generally
-        // better to explicitly list the files and directories instead, to insure that
-        // fetching from tarballs, file system paths, and version control all result
-        // in the same contents hash.
-        "",
-        // For example...
-        //"build.zig",
-        //"build.zig.zon",
-        //"src",
-        //"LICENSE",
-        //"README.md",
+        "build.zig",
+        "build.zig.zon",
+        "src/main.zig",
+        "LICENSE",
+        "README.md",
     },
 }
