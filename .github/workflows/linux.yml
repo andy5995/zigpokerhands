@@ -28,6 +28,9 @@ jobs:
       - name: Build
         run: zig build
 
+      - name: Run
+        run: zig build run
+
       - name: Test
         run: zig build test
 
