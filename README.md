@@ -1,3 +1,5 @@
+[![Linux CI](https://github.com/andy5995/zigpokerhands/actions/workflows/linux.yml/badge.svg)](https://github.com/andy5995/zigpokerhands/actions/workflows/linux.yml)
+
 # zigpokerhands
 
 A non-functioning program that uses
