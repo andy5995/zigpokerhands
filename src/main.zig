@@ -2,14 +2,23 @@ const std = @import("std");
 const zdeck = @import("zigdeck");
 
 pub fn main() !void {
-    var deck = zdeck.Deck.init();
     var rng = std.rand.DefaultPrng.init(@as(u64, @intCast(std.time.milliTimestamp())));
-    zdeck.Deck.shuffle(&deck, &rng.random());
 
-    const hand = getFiveCards(&deck);
-    const hasPair = containsPair(hand);
-    std.debug.print("Hand: {any}\n", .{hand});
-    std.debug.print("Contains a pair: {}\n", .{hasPair});
+    const total = 20;
+    var counter: usize = 0;
+    for (0..total) |_| {
+        var deck = zdeck.Deck.init();
+        zdeck.Deck.shuffle(&deck, &rng.random());
+        const hand = getFiveCards(&deck);
+        const hasPair = containsPair(hand);
+
+        if (hasPair) {
+            counter += 1;
+        }
+        std.debug.print("Hand: {any}\n\n", .{hand});
+    }
+
+    std.debug.print("hands: {d} | pairs: {d}\n", .{total, counter});
 }
 
 fn getFiveCards(deck: *zdeck.Deck) [5]zdeck.Card {
@@ -21,16 +30,14 @@ fn getFiveCards(deck: *zdeck.Deck) [5]zdeck.Card {
 }
 
 fn containsPair(hand: [5]zdeck.Card) bool {
-    var counts: [13]u4 = undefined;
-    for (counts, 0..) |_, i| {
-        counts[i] = 0;
+    var counts: [13]u8 = [_]u8{0} ** 13; // Initialize array with zeros
+
+    for (hand) |card| {
+        const faceIndex: usize = @intFromEnum(card.face) - 1; // Convert enum to int and adjust for zero-based indexing
+        counts[faceIndex] += 1;
     }
 
-    for (hand[0..]) |card| {
-        counts[card.value - 1] += 1;
-    }
-
-    for (counts[0..]) |count| {
+    for (counts) |count| {
         if (count >= 2) {
             return true;
         }

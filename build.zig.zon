@@ -16,8 +16,8 @@
     // internet connectivity.
     .dependencies = .{
         .zigdeck = .{
-            .url = "https://github.com/andy5995/zigdeck/tarball/83ec732d3c934d927fbec56365fab5020366a809",
-            .hash = "1220ff3c111e9d1fe174bbab17f2a2993ec306b28cf788e8d519fe7d48b1d0fa7173",
+            .url = "https://github.com/andy5995/zigdeck/tarball/78c3d54bb90a96ec11df5519f52ecaa15a321c34",
+            .hash = "12200724584fb4cc6587d06a9d8e539ecf1dfbfb227767e421c8a0a4e3d86f25d5b6",
         },
     },
 
