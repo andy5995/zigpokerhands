@@ -28,6 +28,7 @@ const std = @import("std");
 const zdeck = @import("zigdeck");
 
 pub const HandType = enum {
+    None,
     Pair,
     TwoPair,
     ThreeOfAKind,
@@ -82,35 +83,37 @@ fn getFiveCards(deck: *zdeck.Deck) [5]zdeck.Card {
 }
 
 fn evaluateHand(hand: [5]zdeck.Card, handCounts: *std.AutoHashMap(HandType, usize)) void {
+    const handType = getHighestHandType(hand);
+    switch (handType) {
+        .RoyalFlush, .StraightFlush, .FourOfAKind, .FullHouse, .Flush, .Straight, .ThreeOfAKind, .TwoPair, .Pair => {
+            const result = handCounts.get(handType) orelse 0;
+            _ = handCounts.put(handType, result + 1) catch unreachable;
+        },
+        .None => {}, // Do nothing if no hand type is found
+    }
+}
+
+fn getHighestHandType(hand: [5]zdeck.Card) HandType {
     if (containsRoyalFlush(hand)) {
-        const result = handCounts.get(HandType.RoyalFlush) orelse 0;
-        _ = handCounts.put(HandType.RoyalFlush, result + 1) catch unreachable;
+        return HandType.RoyalFlush;
     } else if (containsStraightFlush(hand)) {
-        const result = handCounts.get(HandType.StraightFlush) orelse 0;
-        _ = handCounts.put(HandType.StraightFlush, result + 1) catch unreachable;
+        return HandType.StraightFlush;
     } else if (containsFourOfAKind(hand)) {
-        const result = handCounts.get(HandType.FourOfAKind) orelse 0;
-        _ = handCounts.put(HandType.FourOfAKind, result + 1) catch unreachable;
+        return HandType.FourOfAKind;
     } else if (containsFullHouse(hand)) {
-        const result = handCounts.get(HandType.FullHouse) orelse 0;
-        _ = handCounts.put(HandType.FullHouse, result + 1) catch unreachable;
+        return HandType.FullHouse;
+    } else if (containsFlush(hand)) {
+        return HandType.Flush;
+    } else if (containsStraight(hand)) {
+        return HandType.Straight;
     } else if (containsThreeOfAKind(hand)) {
-        const result = handCounts.get(HandType.ThreeOfAKind) orelse 0;
-        _ = handCounts.put(HandType.ThreeOfAKind, result + 1) catch unreachable;
+        return HandType.ThreeOfAKind;
     } else if (containsTwoPair(hand)) {
-        const result = handCounts.get(HandType.TwoPair) orelse 0;
-        _ = handCounts.put(HandType.TwoPair, result + 1) catch unreachable;
+        return HandType.TwoPair;
     } else if (containsPair(hand)) {
-        const result = handCounts.get(HandType.Pair) orelse 0;
-        _ = handCounts.put(HandType.Pair, result + 1) catch unreachable;
-    }
-    if (containsStraight(hand)) {
-        const result = handCounts.get(HandType.Straight) orelse 0;
-        _ = handCounts.put(HandType.Straight, result + 1) catch unreachable;
-    }
-    if (containsFlush(hand)) {
-        const result = handCounts.get(HandType.Flush) orelse 0;
-        _ = handCounts.put(HandType.Flush, result + 1) catch unreachable;
+        return HandType.Pair;
+    } else {
+        return HandType.None;
     }
 }
 
