@@ -29,6 +29,7 @@ const zdeck = @import("zigdeck");
 
 pub const HandType = enum {
     Pair,
+    TwoPair,
     ThreeOfAKind,
     Straight,
     Flush,
@@ -55,6 +56,7 @@ pub fn main() !void {
 
     const handRanks = [_]HandType{
         HandType.Pair,
+        HandType.TwoPair,
         HandType.ThreeOfAKind,
         HandType.Straight,
         HandType.Flush,
@@ -95,6 +97,9 @@ fn evaluateHand(hand: [5]zdeck.Card, handCounts: *std.AutoHashMap(HandType, usiz
     } else if (containsThreeOfAKind(hand)) {
         const result = handCounts.get(HandType.ThreeOfAKind) orelse 0;
         _ = handCounts.put(HandType.ThreeOfAKind, result + 1) catch unreachable;
+    } else if (containsTwoPair(hand)) {
+        const result = handCounts.get(HandType.TwoPair) orelse 0;
+        _ = handCounts.put(HandType.TwoPair, result + 1) catch unreachable;
     } else if (containsPair(hand)) {
         const result = handCounts.get(HandType.Pair) orelse 0;
         _ = handCounts.put(HandType.Pair, result + 1) catch unreachable;
@@ -107,7 +112,6 @@ fn evaluateHand(hand: [5]zdeck.Card, handCounts: *std.AutoHashMap(HandType, usiz
         const result = handCounts.get(HandType.Flush) orelse 0;
         _ = handCounts.put(HandType.Flush, result + 1) catch unreachable;
     }
-    // Add checks for other hand types here
 }
 
 fn containsPair(hand: [5]zdeck.Card) bool {
@@ -125,6 +129,25 @@ fn containsPair(hand: [5]zdeck.Card) bool {
     }
 
     return false;
+}
+
+fn containsTwoPair(hand: [5]zdeck.Card) bool {
+    var counts: [13]u8 = [_]u8{0} ** 13; // Initialize array with zeros
+
+    for (hand) |card| {
+        const faceIndex: usize = @intFromEnum(card.face) - 1;
+        counts[faceIndex] += 1;
+    }
+
+    const pairCount: usize = blk: {
+        var count: usize = 0;
+        for (counts) |c| {
+            if (c == 2) count += 1;
+        }
+        break :blk count;
+    };
+
+    return pairCount == 2;
 }
 
 fn containsThreeOfAKind(hand: [5]zdeck.Card) bool {
