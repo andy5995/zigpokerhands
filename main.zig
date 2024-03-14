@@ -22,7 +22,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-// Author's Email: arch_stanton5995@proton.me
 
 const std = @import("std");
 const zdeck = @import("zigdeck");
