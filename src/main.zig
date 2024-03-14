@@ -41,7 +41,7 @@ pub const HandType = enum {
 };
 
 pub fn main() !void {
-    var rng = std.rand.DefaultPrng.init(@as(u64, @intCast(std.time.milliTimestamp())));
+    var rng = std.rand.DefaultPrng.init(@intCast(std.time.milliTimestamp()));
 
     const total = 1000000;
     std.debug.print("Evaluating {d} hands...\n\n", .{total});
